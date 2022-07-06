@@ -1,14 +1,36 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Brawler&display=swap');
+a{
+    font-family: 'Brawler', serif;
+    font-size: 20px;
+    color:rgba(82, 80, 80,0.80);
+    text-decoration: none;
+}
 body{
     background-color: rgb(167, 167, 167)
 }
 
+span{
+    position: absolute;
+    transform-origin: top center;
+    padding: 225px;
+}
+
+.container{
+    font-family: 'Brawler', serif;
+    font-size: 50px;
+    color: rgba(82, 80, 80,0.5);
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+
 .card-outline{
     height: 90px;
     width: 60px;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.20);
     border-radius: 10%;
-
 }    
 
 #table{
@@ -27,6 +49,44 @@ body{
     
 }
 
-#player-side{
-    display: flex;
-    justify-content: space-between;
+#letter-b{
+    transform: rotate(48deg);
+}
+#letter-l{
+    transform: rotate(36deg);
+}
+#letter-a{
+    transform: rotate(24deg);
+}
+#letter-c{
+    transform: rotate(12deg);
+}
+#letter-k{
+    transform: rotate(0deg);
+}
+#letter-j{
+    transform: rotate(-12deg);
+
+}
+#letter-aa{
+    transform: rotate(-24deg);
+
+}
+#letter-cc{
+    transform: rotate(-36deg);
+
+}
+#letter-kk{
+    transform: rotate(-48deg);
+}
+
+#start-btn{
+    font-family: 'Brawler', serif;
+    font-size: 20px;
+    color:rgba(82, 80, 80,0.80);
+    background-color: rgba(82, 80, 80,0.1);
+    padding: 10px 25px 10px 25px;
+    border: 2px solid rgba(82, 80, 80,0.5);
+    border-radius: 10px;
+    box-shadow: inset 0 0 1px 3px rgba(0,0,0,.05);
+}
