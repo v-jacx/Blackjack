@@ -26,7 +26,7 @@ const getDeck = async () =>{
     const id = deck.data.deck_id;
 
     deal(id, player);
-    deal(id, dealer);
+    // deal(id, dealer);
 
     //hit event listener
     hitBtn.addEventListener('click', ()=>{
@@ -49,10 +49,8 @@ const deal = async (deck_id, current) => {
 
     }
 
-const displayCard = (current) =>{
-    console.log(current);
+const displayCard = async (current) =>{
     const card = current.hand.pop();
-    console.log(card);
     if(current.hand.length === 0){
         current.tableSide.innerHTML = `<img src='${card[0].image}'>`;
     }else{
@@ -64,6 +62,27 @@ const displayCard = (current) =>{
     current.hand.push(card);
     const img = document.querySelectorAll('img');
     img.forEach((image)=>image.style.height = '90px');
+
+    tally(current);
+}
+
+const tally= async (current)=>{
+    const card = current.hand.pop();
+
+    if(isNaN(card[0].value)){
+        if(card[0].value === 'JACK'||card[0].value ==='QUEEN'||card[0].value==='KING'){
+            current.score+= 10;
+        }else if(card[0].value ==='ACE'){
+            if(current === player){
+                // aceValue();
+        }}
+        
+    }else{
+    // score += parseInt(card[0].value);
+    }
+    current.hand.push(card);
+    console.log(card);
+    console.log(current.score);
 }
 
 getDeck();
@@ -74,9 +93,7 @@ getDeck();
 
 
 //player
-    //Hit button draws card (call deal function)
         //score
-    //stand
         //moves to dealers turn
 
 //dealer
