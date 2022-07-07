@@ -5,15 +5,17 @@
     <title>Blackjack</title>
     <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-    <div id="table">
-    <header>            
-        <div>DEALER:<span id="dealer-points">0</span></div>
-        <div>YOU:<span id="player-points">0</span></div>
-    </header>          
-    <div id="dealer-side">
+<body>   
+    <div id="points">       
+
+
+    </div>  
+    <div id="table">    
+    <div>DEALER: <span id="dealer-points">00</span></div>
+    <div id="dealer-side">       
         <div class="card-outline"></div>
-    </div>
+    </div>        
+
         <div class="container">
             <span id="letter-b">B</span>
             <span id="letter-l">L</span>
@@ -25,6 +27,11 @@
             <span id="letter-cc">C</span>
             <span id="letter-kk">K</span>
         </div>
+    <div id="banner">
+        <h1>TEXT</h1>
+        <div id="play-again">Play Again</div>
+    </div>        
+    <div>YOU: <span id="player-points">00</span></div>
         <div id ="player-side">
             <div class="card-outline" id="play-side"></div>
         </div>
@@ -33,6 +40,7 @@
                 <div id="stand">STAND</div>
             </div>
     </div>
+
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/game-table.js"></script>

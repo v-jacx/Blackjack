@@ -1,6 +1,7 @@
 //player object
 const player = {
     hand: [],
+    numOfCards: 0,
     aceValues: [],
     score: 0,
     turn: true,
@@ -28,9 +29,9 @@ const getDeck = async () =>{
 
     const id = deck.data.deck_id;
 
-    // deal(id, player, false);
+    deal(id, player, false);
     deal(id, dealer, false);
-    // deal(id,player, false);
+    deal(id,player, false);
     deal(id,dealer,true);
     
     //hit event listener
@@ -41,9 +42,10 @@ const getDeck = async () =>{
     })
     //stand event listener
     standBtn.addEventListener('click',()=>{
+        if(player.turn = true){
         player.turn = false;
         dealer.turn = true;
-        dealersTurn(id);
+        dealersTurn(id);}
     })
 }
 
@@ -54,6 +56,9 @@ const deal = async (deck_id, current, facedown) => {
 
         const card = dealCard.data.cards;
         current.hand.push(card);
+        if(current === player){
+            player.numOfCards++;
+        }
 
         displayCard(deck_id, current, facedown);
 
@@ -136,11 +141,14 @@ const tally = (deck_id, current)=>{
     if(dealer.turn === true){
         if (current.score <=16){
             deal(deck_id, current, false);
+        }else if(current.score >=17){
+            dealer.turn=false;
         }
     if(current.aceValues.length !== 0){
         aceValue(current);}
     }
     // displayPoints(current);
+    determineWinner(current);
 }
 
 //gives ace value based on player and rules
@@ -178,20 +186,49 @@ const flipCard = ()=>{
     dealer.hand.push(dealer.fdCard);
 }
 
+const determineWinner= (current) =>{
+
+    if(current.score===21){    
+        if(current===player && player.numOfCards===2){
+            flipCard();
+            dealer.turn = false;
+            tally(dealer);
+            determineWinner(dealer);
+        }else if(player.score=== 21 && dealer.score === 21){
+            console.log('tie');
+            //tieBanner();
+        }else{
+            if(current === player){
+                console.log('win');
+                //winnerBanner();
+            }else{
+                console.log('lost');
+                //lostBanner
+            }}}else if(current.score > 21){
+        if(current===player){
+            console.log('lost');
+            //lostBanner();
+        }else if(current === dealer && player.score <=21){
+            console.log('win');
+            //winnerBanner();
+        }
+    }else if(player.turn === false && dealer.turn=== false){
+        if(player.score > dealer.score && player.score<=21){
+            console.log('win');
+            //winnerBanner();
+        }else if(dealer.score > player.score && dealer.score <=21){
+            console.log('lost');
+            //lostBanner();
+        }else if(dealer.score === player.score){
+            console.log('tie');
+            //tieBanner();
+        }
+    }
+
+    
+}
+
 
 getDeck();
 
 
-
-
-//naturals function (tie)
-    //ace and (face card or 10card)
-
-
-//player
-        //score
-        //moves to dealers turn
-
-// //scoring
-//     score  = value of cards added together
-//     if score >21 player goes bust no more cards dealt; 
