@@ -3,14 +3,17 @@ const player = {
     hand: [],
     aceValues: [],
     score: 0,
+    turn: true,
     tableSide: document.querySelector('#player-side'),
 }
 
 //dealer object
 const dealer = {
     hand:[],
+    aceValues: [],
     score: 0,
     fdCard: {},
+    turn: false,
     tableSide: document.querySelector('#dealer-side'),
 }
 
@@ -18,8 +21,6 @@ const dealer = {
 const hitBtn= document.querySelector('#hit');
 //stand button
 const standBtn = document.querySelector('#stand');
-
-let playerTurn = true;
 
 //six card decks
 const getDeck = async () =>{
@@ -34,12 +35,15 @@ const getDeck = async () =>{
     
     //hit event listener
     hitBtn.addEventListener('click', ()=>{
-        if(playerTurn===true){deal(id, player);}
+        if(player.turn===true){
+            deal(id, player,false);
+        }
     })
     //stand event listener
     standBtn.addEventListener('click',()=>{
-        playerTurn = false;
-        dealersTurn();
+        player.turn = false;
+        dealer.turn = true;
+        dealersTurn(id);
     })
 }
 
@@ -51,13 +55,16 @@ const deal = async (deck_id, current, facedown) => {
         const card = dealCard.data.cards;
         current.hand.push(card);
 
-        displayCard(current, facedown);
+        displayCard(deck_id, current, facedown);
 
     }
 
-const displayCard = async (current, facedown) =>{
+//displays cards dealt 
+const displayCard = async (deck_id, current, facedown) =>{
 
     const card = current.hand.pop();
+    console.log(current.hand);
+
     if(facedown === false){
     if(current.hand.length === 0){
         current.tableSide.innerHTML = `<img src='${card[0].image}'>`;
@@ -66,24 +73,31 @@ const displayCard = async (current, facedown) =>{
     div.innerHTML = `<img src='${card[0].image}'>`;
     current.tableSide.appendChild(div);
     }
-
     current.hand.push(card);
-    tally(current);
+
+        tally(deck_id, current);
+    
     }else{
         current.fdCard = card;
         const div = document.createElement('div');
-        div.innerHTML = `<img src='assets/face-down-card.jpeg'>`;
+        div.innerHTML = `<img id='face-down' src='assets/face-down-card.jpeg'>`;
         current.tableSide.appendChild(div);
     }
 
 
     const img = document.querySelectorAll('img');
     img.forEach((image)=>image.style.height = '90px');
+    img.forEach((image)=>image.style.width = '60px');
 
 }
 
-const tally= async (current)=>{
+//tallies up card totals
+const tally = (deck_id, current)=>{
+    console.log(current.hand);
     const card = current.hand.pop();
+
+    // console.log(card[0].value);
+    // console.log(current.score);
 
     if(isNaN(card[0].value)){
         if(card[0].value === 'JACK'||card[0].value ==='QUEEN'||card[0].value==='KING'){
@@ -98,40 +112,76 @@ const tally= async (current)=>{
                 current.aceValues.push(11);
                 current.score += 11;
             }
-
-        } 
+        }else{
+            if(current.score + 11 >= 17 && !(current.score + 11 > 21)){
+                current.aceValues.push(11);
+                current.score += 11;
+            }else{ 
+                current.aceValues.push(1);
+                current.score +=1;
+            }
+        }
     }}else{
     current.score += parseInt(card[0].value);
     }
 
     current.hand.push(card);
 
-    if(current === player){
-        if(current.aceValues.length !== 0){
-        aceValue(current);
-    }}
+    if(player.turn === true){
+    if(current.aceValues.length !== 0){
+        aceValue(current);}}
 
     console.log(current.score);
 
+    if(dealer.turn === true){
+        if (current.score <=16){
+            deal(deck_id, current, false);
+        }
+    if(current.aceValues.length !== 0){
+        aceValue(current);}
+    }
     // displayPoints(current);
 }
 
+//gives ace value based on player and rules
 const aceValue = (current) =>{
+    if(current===player){
     for(let i=0; i<current.aceValues.length; i++){
         current.score -= current.aceValues[i];
         if((current.score+11)>21){
             current.aceValues[i]=1;
         }else{current.aceValues[i]=11;}
-        
-        current.score += current.aceValues[i];
-            console.log(current.aceValues); 
-}}
-
-const dealersTurn = async () =>{
+        current.score += current.aceValues[i];}
+    }else{
+        for(let i=0; i<current.aceValues.length; i++){
+            current.score -= current.aceValues[i];
+            if(current.score + 11 >= 17 && !(current.score + 11 > 21)){
+                current.aceValues[i]=11;
+            }else{current.aceValues[i]=1;}
+            current.score += current.aceValues[i];}
+    }
 
 }
 
+
+
+//controls dealers turn
+const dealersTurn = (deck_id) =>{
+    flipCard();
+    tally(deck_id, dealer);
+
+}
+
+const flipCard = ()=>{
+    const img = document.querySelector('#face-down');
+    img.src=`${dealer.fdCard[0].image}`;
+    dealer.hand.push(dealer.fdCard);
+}
+
+
 getDeck();
+
+
 
 
 //naturals function (tie)
@@ -141,15 +191,6 @@ getDeck();
 //player
         //score
         //moves to dealers turn
-
-//dealer
-    //if score =<16 dealer must hit
-    //if score =>17 dealer must stand
-
-    //if dealer draws ace 
-        // if value 11 + other cards values = 17 or >
-        //ace = 11 dealer stands
-        //else ace = 1;
 
 // //scoring
 //     score  = value of cards added together
