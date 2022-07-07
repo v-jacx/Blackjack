@@ -53,7 +53,14 @@ const displayCard = (current) =>{
     console.log(current);
     const card = current.hand.pop();
     console.log(card);
-    current.tableSide.innerHTML = `<div><img src='${card[0].image}'></div>`;
+    if(current.hand.length === 0){
+        current.tableSide.innerHTML = `<img src='${card[0].image}'>`;
+    }else{
+    const div = document.createElement('div');
+    div.innerHTML = `<img src='${card[0].image}'>`;
+    current.tableSide.appendChild(div);
+    }
+
     current.hand.push(card);
     const img = document.querySelectorAll('img');
     img.forEach((image)=>image.style.height = '90px');
