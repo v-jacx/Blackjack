@@ -1,6 +1,7 @@
 //player object
 const player = {
     hand: [],
+    aceValues: [],
     score: 0,
     tableSide: document.querySelector('#player-side'),
 }
@@ -9,6 +10,7 @@ const player = {
 const dealer = {
     hand:[],
     score: 0,
+    fdCard: {},
     tableSide: document.querySelector('#dealer-side'),
 }
 
@@ -25,9 +27,11 @@ const getDeck = async () =>{
 
     const id = deck.data.deck_id;
 
-    deal(id, player);
-    // deal(id, dealer);
-
+    // deal(id, player, false);
+    deal(id, dealer, false);
+    // deal(id,player, false);
+    deal(id,dealer,true);
+    
     //hit event listener
     hitBtn.addEventListener('click', ()=>{
         if(playerTurn===true){deal(id, player);}
@@ -35,22 +39,26 @@ const getDeck = async () =>{
     //stand event listener
     standBtn.addEventListener('click',()=>{
         playerTurn = false;
+        dealersTurn();
     })
 }
 
 //deal function
-const deal = async (deck_id, current) => {
+const deal = async (deck_id, current, facedown) => {
 
         const dealCard = await axios.get(`https://www.deckofcardsapi.com/api/deck/${deck_id}/draw/?count=1`);
 
         const card = dealCard.data.cards;
         current.hand.push(card);
-        displayCard(current);
+
+        displayCard(current, facedown);
 
     }
 
-const displayCard = async (current) =>{
+const displayCard = async (current, facedown) =>{
+
     const card = current.hand.pop();
+    if(facedown === false){
     if(current.hand.length === 0){
         current.tableSide.innerHTML = `<img src='${card[0].image}'>`;
     }else{
@@ -60,10 +68,18 @@ const displayCard = async (current) =>{
     }
 
     current.hand.push(card);
+    tally(current);
+    }else{
+        current.fdCard = card;
+        const div = document.createElement('div');
+        div.innerHTML = `<img src='assets/face-down-card.jpeg'>`;
+        current.tableSide.appendChild(div);
+    }
+
+
     const img = document.querySelectorAll('img');
     img.forEach((image)=>image.style.height = '90px');
 
-    tally(current);
 }
 
 const tally= async (current)=>{
@@ -74,15 +90,45 @@ const tally= async (current)=>{
             current.score+= 10;
         }else if(card[0].value ==='ACE'){
             if(current === player){
-                // aceValue();
-        }}
-        
-    }else{
-    // score += parseInt(card[0].value);
+                
+                if((current.score+11)>21){
+                current.aceValues.push(1);
+                current.score += 1;
+            }else{
+                current.aceValues.push(11);
+                current.score += 11;
+            }
+
+        } 
+    }}else{
+    current.score += parseInt(card[0].value);
     }
+
     current.hand.push(card);
-    console.log(card);
+
+    if(current === player){
+        if(current.aceValues.length !== 0){
+        aceValue(current);
+    }}
+
     console.log(current.score);
+
+    // displayPoints(current);
+}
+
+const aceValue = (current) =>{
+    for(let i=0; i<current.aceValues.length; i++){
+        current.score -= current.aceValues[i];
+        if((current.score+11)>21){
+            current.aceValues[i]=1;
+        }else{current.aceValues[i]=11;}
+        
+        current.score += current.aceValues[i];
+            console.log(current.aceValues); 
+}}
+
+const dealersTurn = async () =>{
+
 }
 
 getDeck();
@@ -100,18 +146,11 @@ getDeck();
     //if score =<16 dealer must hit
     //if score =>17 dealer must stand
 
-//ace value
-    //if player draws ace
-        //if value is ace 
-            //if score = >17 ace is 1
-            //if score = <17 ace is 11
     //if dealer draws ace 
         // if value 11 + other cards values = 17 or >
-            //ace = 11 dealer stands
+        //ace = 11 dealer stands
         //else ace = 1;
 
-//scoring
-    //score  = value of cards added together
-    //if score >21 player goes bust no more cards dealt;
-
-    
+// //scoring
+//     score  = value of cards added together
+//     if score >21 player goes bust no more cards dealt; 

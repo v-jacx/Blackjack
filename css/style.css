@@ -116,3 +116,8 @@ span{
 #player-side{
     display: flex;
 }
+
+#dealer-side{
+    display: flex;
+    flex-direction: row-reverse;
+}
