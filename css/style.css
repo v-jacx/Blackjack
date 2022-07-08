@@ -17,6 +17,11 @@ span{
     transform-origin: top center;
     padding: 225px; 
 }
+img{
+    position: sticky;
+    margin-left: -2.5rem;
+    box-shadow: -0.5px 0 5px 6px rgba(0,0,0,.10);
+}
 
 .container{
     font-family: 'Brawler', serif;

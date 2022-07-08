@@ -74,7 +74,7 @@ const deal = async (deck_id, current, facedown) => {
             player.numOfCards++;
         }
 
-        displayCard(deck_id, current, facedown);
+    displayCard(deck_id, current, facedown);
 
     }
 
@@ -237,7 +237,7 @@ const determineWinner= async (deck_id, current) =>{
 const winnerBanner=()=>{
     bannerContent.innerText = 'YOU WON';
     banner.style.opacity = '1';
-    player.points.style.opacity = '0';
+
 
 }
 
@@ -245,13 +245,13 @@ const lostBanner=()=>{
     bannerContent.innerText = 'BETTER LUCK NEXT TIME!';
     bannerContent.style.fontSize = '15px';
     banner.style.opacity = '1';
-    player.points.style.opacity = '0';
+
 
 }
 const tieBanner=()=>{
     bannerContent.innerText = 'ITS A TIE!';
     banner.style.opacity = '1';
-    player.points.style.opacity = '0';
+
 
 }
 
