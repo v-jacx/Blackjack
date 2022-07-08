@@ -28,15 +28,19 @@ const standBtn = document.querySelector('#stand');
 const bannerContent = document.querySelector('#banner-content');
 const banner = document.querySelector('#banner');
 
-console.log(bannerContent.innerText);
+//play again button
+const playAgainBtn = document.querySelector('#play-again');
+playAgainBtn.addEventListener('click', ()=>{
+    playAgain();
+});
+
 
 //six card decks
-const getDeck = async () =>{   
+const getDeck = async () =>{  
     const deck = await axios.get(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6`);
 
 
     const id = deck.data.deck_id;
-
     deal(id, player, false);
     deal(id, dealer, false);
     deal(id,player, false);
@@ -56,8 +60,8 @@ const getDeck = async () =>{
         dealersTurn(id);}
         
     })
-
 }
+
 
 //deal function
 const deal = async (deck_id, current, facedown) => {
@@ -108,11 +112,8 @@ const displayCard = async (deck_id, current, facedown) =>{
 
 //tallies up card totals
 const tally = (deck_id, current)=>{
-    console.log(current.hand);
     const card = current.hand.pop();
 
-    // console.log(card[0].value);
-    // console.log(current.score);
 
     if(isNaN(card[0].value)){
         if(card[0].value === 'JACK'||card[0].value ==='QUEEN'||card[0].value==='KING'){
@@ -145,8 +146,6 @@ const tally = (deck_id, current)=>{
     if(player.turn === true){
     if(current.aceValues.length !== 0){
         aceValue(current);}}
-
-    console.log(current.score);
 
     if(dealer.turn === true){
         if (current.score <=16){
@@ -206,28 +205,42 @@ const determineWinner= async (deck_id, current) =>{
             dealersTurn(deck_id);
             determineWinner(deck_id, dealer);
         }else if(player.score=== 21 && dealer.score === 21){
+            player.turn = false;
+            dealer.turn = false;
             console.log('tie');
             tieBanner();
         }else{
             if(current === player){
+                player.turn = false;
+                dealer.turn = false;
                 console.log('win');
                 winnerBanner();
             }else{
+                player.turn = false;
+                dealer.turn = false;
                 console.log('lost');
                 lostBanner
             }}}else if(current.score > 21){
         if(current===player){
+            player.turn = false;
+            dealer.turn = false;
             console.log('lost');
             lostBanner();
         }else if(current === dealer && player.score <=21){
+            player.turn = false;
+            dealer.turn = false;
             console.log('win');
             winnerBanner();
         }
-    }else if(player.turn === false && dealer.turn=== false){
+    }else if(player.turn === false && dealer.turn  === false){
         if(player.score > dealer.score && player.score<=21){
+            player.turn = false;
+            dealer.turn = false;
             console.log('win');
             winnerBanner();
         }else if(dealer.score > player.score && dealer.score <=21){
+            player.turn = false;
+            dealer.turn = false;
             console.log('lost');
             lostBanner();
         }else if(dealer.score === player.score){
@@ -262,6 +275,10 @@ const tieBanner=()=>{
 
 const displayPoints = (current) =>{
     current.points.innerText = current.score.toString();
+}
+
+const playAgain = () =>{    
+    document.location.reload() = true;
 }
 
 

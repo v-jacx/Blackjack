@@ -140,7 +140,7 @@ span{
     align-items: center;
     position: absolute;
     margin-top: 10%;
-    pointer-events: none;
     opacity: 0;
     text-align: center;
+    cursor: pointer;
 }
