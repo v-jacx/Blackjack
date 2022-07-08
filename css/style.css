@@ -20,7 +20,7 @@ span{
 img{
     position: sticky;
     margin-left: -2.5rem;
-    box-shadow: -0.5px 0 5px 6px rgba(0,0,0,.10);
+    box-shadow: -0.5px 0 5px 6px rgba(0,0,0,.17);
 }
 
 .container{
@@ -40,8 +40,6 @@ img{
     border: 2px solid rgba(255, 255, 255, 0.20);
     border-radius: 10%;
 }
-
-
 
 #table{
     margin: 20% 30% 20% 25%;
@@ -102,11 +100,24 @@ img{
 }
 
 #dealer-points, #player-points{
-    display: inline;
-    padding: 0;
+    display: inline-flex;
+    position: absolute;
+    padding: 0 2px 0 2px;
     font-family: 'Old Standard TT', serif;
     font-weight: bold;
 
+}
+
+#dealer-label{
+    display: inline;
+    margin-right: 85%;
+}
+
+#player-label{
+    display: inline;
+    margin-left: 85%;
+    margin-right: 15%;
+    position: absolute;
 }
 
 #hit, #stand{
@@ -149,3 +160,4 @@ img{
     text-align: center;
     cursor: pointer;
 }
+
