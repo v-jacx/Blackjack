@@ -6,6 +6,7 @@ const player = {
     score: 0,
     turn: true,
     tableSide: document.querySelector('#player-side'),
+    points: document.querySelector('#player-points'),
 }
 
 //dealer object
@@ -16,16 +17,23 @@ const dealer = {
     fdCard: {},
     turn: false,
     tableSide: document.querySelector('#dealer-side'),
+    points: document.querySelector('#dealer-points'),
 }
 
 //hit button
 const hitBtn= document.querySelector('#hit');
 //stand button
 const standBtn = document.querySelector('#stand');
+//banner content
+const bannerContent = document.querySelector('#banner-content');
+const banner = document.querySelector('#banner');
+
+console.log(bannerContent.innerText);
 
 //six card decks
-const getDeck = async () =>{
+const getDeck = async () =>{   
     const deck = await axios.get(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6`);
+
 
     const id = deck.data.deck_id;
 
@@ -33,7 +41,7 @@ const getDeck = async () =>{
     deal(id, dealer, false);
     deal(id,player, false);
     deal(id,dealer,true);
-    
+
     //hit event listener
     hitBtn.addEventListener('click', ()=>{
         if(player.turn===true){
@@ -42,11 +50,13 @@ const getDeck = async () =>{
     })
     //stand event listener
     standBtn.addEventListener('click',()=>{
-        if(player.turn = true){
+        if(player.turn === true){
         player.turn = false;
         dealer.turn = true;
         dealersTurn(id);}
+        
     })
+
 }
 
 //deal function
@@ -147,8 +157,8 @@ const tally = (deck_id, current)=>{
     if(current.aceValues.length !== 0){
         aceValue(current);}
     }
-    // displayPoints(current);
-    determineWinner(current);
+    displayPoints(current);
+    determineWinner(deck_id,current);
 }
 
 //gives ace value based on player and rules
@@ -180,52 +190,78 @@ const dealersTurn = (deck_id) =>{
 
 }
 
-const flipCard = ()=>{
+const flipCard = async ()=>{
     const img = document.querySelector('#face-down');
     img.src=`${dealer.fdCard[0].image}`;
     dealer.hand.push(dealer.fdCard);
 }
 
-const determineWinner= (current) =>{
+const determineWinner= async (deck_id, current) =>{
 
     if(current.score===21){    
         if(current===player && player.numOfCards===2){
-            flipCard();
+            player.turn = false;
             dealer.turn = false;
-            tally(dealer);
-            determineWinner(dealer);
+            const deckInPlay = await axios.get(`https://www.deckofcardsapi.com/api/deck/${deck_id}`)
+            dealersTurn(deck_id);
+            determineWinner(deck_id, dealer);
         }else if(player.score=== 21 && dealer.score === 21){
             console.log('tie');
-            //tieBanner();
+            tieBanner();
         }else{
             if(current === player){
                 console.log('win');
-                //winnerBanner();
+                winnerBanner();
             }else{
                 console.log('lost');
-                //lostBanner
+                lostBanner
             }}}else if(current.score > 21){
         if(current===player){
             console.log('lost');
-            //lostBanner();
+            lostBanner();
         }else if(current === dealer && player.score <=21){
             console.log('win');
-            //winnerBanner();
+            winnerBanner();
         }
     }else if(player.turn === false && dealer.turn=== false){
         if(player.score > dealer.score && player.score<=21){
             console.log('win');
-            //winnerBanner();
+            winnerBanner();
         }else if(dealer.score > player.score && dealer.score <=21){
             console.log('lost');
-            //lostBanner();
+            lostBanner();
         }else if(dealer.score === player.score){
             console.log('tie');
-            //tieBanner();
+            tieBanner();
         }
     }
 
     
+}
+
+const winnerBanner=()=>{
+    bannerContent.innerText = 'YOU WON';
+    banner.style.opacity = '1';
+    player.points.style.opacity = '0';
+
+}
+
+const lostBanner=()=>{
+    bannerContent.innerText = 'BETTER LUCK NEXT TIME!';
+    bannerContent.style.fontSize = '15px';
+    banner.style.opacity = '1';
+    player.points.style.opacity = '0';
+
+}
+const tieBanner=()=>{
+    bannerContent.innerText = 'ITS A TIE!';
+    banner.style.opacity = '1';
+    player.points.style.opacity = '0';
+
+}
+
+const displayPoints = (current) =>{
+    current.points.innerText = current.score.toString();
 }
 
 
