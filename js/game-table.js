@@ -26,6 +26,7 @@ const hitBtn= document.querySelector('#hit');
 const standBtn = document.querySelector('#stand');
 //banner content
 const bannerContent = document.querySelector('#banner-content');
+//banner to change opacity
 const banner = document.querySelector('#banner');
 
 //play again button
@@ -62,7 +63,6 @@ const getDeck = async () =>{
     })
 }
 
-
 //deal function
 const deal = async (deck_id, current, facedown) => {
 
@@ -82,7 +82,6 @@ const deal = async (deck_id, current, facedown) => {
 const displayCard = async (deck_id, current, facedown) =>{
 
     const card = current.hand.pop();
-    console.log(current.hand);
 
     if(facedown === false){
     if(current.hand.length === 0){
@@ -112,8 +111,8 @@ const displayCard = async (deck_id, current, facedown) =>{
 
 //tallies up card totals
 const tally = (deck_id, current)=>{
+    
     const card = current.hand.pop();
-
 
     if(isNaN(card[0].value)){
         if(card[0].value === 'JACK'||card[0].value ==='QUEEN'||card[0].value==='KING'){
@@ -180,8 +179,6 @@ const aceValue = (current) =>{
 
 }
 
-
-
 //controls dealers turn
 const dealersTurn = (deck_id) =>{
     flipCard();
@@ -205,15 +202,11 @@ const determineWinner= async (deck_id, current) =>{
             dealersTurn(deck_id);
             determineWinner(deck_id, dealer);
         }else if(player.score=== 21 && dealer.score === 21){
-            console.log('tie');
             tieBanner();
         }else{
             if(current === player){
-                console.log('win');
                 winnerBanner();
             }else{
-
-                console.log('lost');
                 lostBanner();
             }}}else if(current.score > 21){
         if(current===player){
@@ -262,7 +255,6 @@ const displayPoints = (current) =>{
 const playAgain = () =>{    
     document.location.reload() = true;
 }
-
 
 getDeck();
 
