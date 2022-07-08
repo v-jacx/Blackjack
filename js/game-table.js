@@ -148,9 +148,9 @@ const tally = (deck_id, current)=>{
         aceValue(current);}}
 
     if(dealer.turn === true){
-        if (current.score <=16){
+        if (current.score <= 16){
             deal(deck_id, current, false);
-        }else if(current.score >=17){
+        }else if(current.score >= 17){
             dealer.turn=false;
         }
     if(current.aceValues.length !== 0){
@@ -205,42 +205,28 @@ const determineWinner= async (deck_id, current) =>{
             dealersTurn(deck_id);
             determineWinner(deck_id, dealer);
         }else if(player.score=== 21 && dealer.score === 21){
-            player.turn = false;
-            dealer.turn = false;
             console.log('tie');
             tieBanner();
         }else{
             if(current === player){
-                player.turn = false;
-                dealer.turn = false;
                 console.log('win');
                 winnerBanner();
             }else{
-                player.turn = false;
-                dealer.turn = false;
+
                 console.log('lost');
                 lostBanner();
             }}}else if(current.score > 21){
         if(current===player){
-            player.turn = false;
-            dealer.turn = false;
             lostBanner();
         }else if(current === dealer && player.score <=21){
-            player.turn = false;
-            dealer.turn = false;
             winnerBanner();
         }
     }else if(player.turn === false && dealer.turn  === false){
         if(player.score > dealer.score && player.score<=21){
-            player.turn = false;
-            dealer.turn = false;
             winnerBanner();
         }else if(dealer.score > player.score && dealer.score <=21){
-            player.turn = false;
-            dealer.turn = false;
             lostBanner();
         }else if(dealer.score === player.score){
-            console.log('tie');
             tieBanner();
         }
     }
