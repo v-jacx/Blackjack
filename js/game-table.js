@@ -202,25 +202,41 @@ const determineWinner= async (deck_id, current) =>{
             dealersTurn(deck_id);
             determineWinner(deck_id, dealer);
         }else if(player.score=== 21 && dealer.score === 21){
-            tieBanner();
+           setTimeout(() => {
+             tieBanner();
+           }, 1250);
         }else{
             if(current === player){
-                winnerBanner();
+                setTimeout(() => {
+                    winnerBanner();
+                }, 1250);
             }else{
-                lostBanner();
+                setTimeout(() => {
+                    lostBanner();
+                }, 1250);
             }}}else if(current.score > 21){
         if(current===player){
-            lostBanner();
+           setTimeout(() => {
+             lostBanner();
+           }, 1250);
         }else if(current === dealer && player.score <=21){
-            winnerBanner();
+            setTimeout(() => {
+                winnerBanner();
+            }, 1250);
         }
     }else if(player.turn === false && dealer.turn  === false){
         if(player.score > dealer.score && player.score<=21){
-            winnerBanner();
+            setTimeout(() => {
+                winnerBanner();
+            }, 1250);
         }else if(dealer.score > player.score && dealer.score <=21){
-            lostBanner();
+            setTimeout(() => {
+                lostBanner();
+            }, 1250);
         }else if(dealer.score === player.score){
-            tieBanner();
+            setTimeout(() => {
+                tieBanner();
+            }, 1250);
         }
     }
 
